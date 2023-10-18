@@ -219,6 +219,7 @@ class _GatewayTransport:
             close_code = int(message.data)
 
             can_reconnect = close_code < 4000 or close_code in _RECONNECTABLE_CLOSE_CODES
+            assert message.extra is not None, "Should be present for WSMsgType.CLOSE messages"
             raise errors.GatewayServerClosedConnectionError(message.extra, close_code, can_reconnect)
 
         if message.type == aiohttp.WSMsgType.CLOSING or message.type == aiohttp.WSMsgType.CLOSED:
